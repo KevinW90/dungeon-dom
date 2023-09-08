@@ -8,6 +8,10 @@ export default class Character extends GameObject {
     super(config);
 
     // character stats
+    this.stats = {
+      maxHp: 10,
+      hp: 10,
+    };
     // character equipment
     // character inventory
     // character status effects

@@ -3,6 +3,7 @@ import DirectionInput from "./input/DirectionInput";
 import KeyPressListener from "./input/KeyPressListener";
 import Character from "./game-objects/Character";
 import { utils } from "./utils";
+import game from "./stores";
 
 export default class Game {
   [key: string]: any;
@@ -19,6 +20,8 @@ export default class Game {
         c: utils.withGrid(0),
       },
     };
+
+    this.init();
   }
 
   startMap(mapConfig: any) {
@@ -99,6 +102,8 @@ export default class Game {
       this.map.drawLayer("restObstacles", this.ctx, this.cameraPerson);
 
       // TODO: draw second layer
+
+      game.set(this);
 
       requestAnimationFrame(() => {
         step();
