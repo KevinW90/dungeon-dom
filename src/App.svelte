@@ -6,6 +6,8 @@
   import { fade } from 'svelte/transition';
   import SceneTransition from './lib/components/sceneTransition.svelte';
   import { utils } from './lib/utils';
+  import game from './lib/stores';
+  import Hero from './lib/components/hero.svelte';
 
   let showMessage = false;
   let message: any;
@@ -73,10 +75,10 @@
 
 
 
-    const game = new Game({
+    game.set(new Game({
       center: { r: utils.withGrid((numRows - 1) / 2), c: utils.withGrid((numCols - 1) / 2) },
       element: document.querySelector('.game-container'),
-    });
+    }));
 
     // text message listener
     document.addEventListener('textMessage', handleShowTextMessage);
@@ -87,12 +89,12 @@
     // battle listener
     document.addEventListener('battle', handleBattle)
     
-    game.init();
   });
 
 </script>
 
 <div class="game-container">
+  <Hero />
   {#if sceneTransition}
     <SceneTransition />
   {/if}
