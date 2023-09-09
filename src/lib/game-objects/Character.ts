@@ -44,11 +44,15 @@ export default class Character extends GameObject {
           type: "walk",
           direction: state.arrow,
         });
+        // take damage for every step just to see the info update
+        this.stats.hp -= 1;
       }
       // update sprite
       this.updateSprite();
     }
   }
+
+  // takeDamage(amount: number) {
 
   startBehavior(state: any, behavior: any) {
     // set direction
