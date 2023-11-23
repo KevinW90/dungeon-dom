@@ -1,8 +1,4 @@
 import { writable, type Writable } from 'svelte/store';
-import type { Enemy, Hero } from './types';
+import type { Game } from './types';
 
-export const game: Writable<{
-	entities: (Hero | Enemy)[];
-}> = writable({
-	entities: [] as (Hero | Enemy)[]
-});
+export const game: Writable<Game> = writable({ objects: [] });

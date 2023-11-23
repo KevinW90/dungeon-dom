@@ -1,36 +1,60 @@
 // factories that allow the generation of game objects like player, enemy, etc.
 import { game } from './stores';
+import type { Character } from './types';
+import * as utils from '$lib/utils';
+import { defaultGame } from './core';
 
-export function createHero(type: string, options: any = {}) {
-	const id = Math.random().toString(36).substring(2, 9);
+function createCharacter(options: any = {}): Character {
+	return {
+		id: utils.uuid(),
+		...options,
+		inventory: []
+	};
+}
+
+export function createGameObject(what: string, options: any) {
+	let go: any;
+	switch (what) {
+		case 'character':
+			go = createCharacter(options);
+			break;
+		default:
+			throw new Error(`Unknown game object type: ${what}`);
+	}
+
 	game.update((g) => {
 		return {
 			...g,
-			entities: [
-				...g.entities,
-				{
-					...options,
-					id,
-					type: 'hero'
-				}
-			]
+			objects: [...g.objects, go]
 		};
 	});
 }
 
-export function createEnemy(type: string, options: any = {}) {
-	const id = Math.random().toString(36).substring(2, 9);
-	game.update((g) => {
-		return {
-			...g,
-			entities: [
-				...g.entities,
-				{
-					...options,
-					id,
-					type: 'enemy'
-				}
-			]
-		};
+export function createGame(options: any = {}) {
+	// code saves cause extra characters
+	game.set({ ...defaultGame });
+
+	createGameObject('character', {
+		name: 'Hero',
+		type: 'hero',
+		hp: 10,
+		maxHp: 10,
+		weapon: {
+			id: utils.uuid(),
+			name: 'Basic Sword',
+			damage: 3
+		}
+	});
+
+	createGameObject('character', {
+		name: 'skeleton',
+		type: 'enemy',
+		hp: 3,
+		maxHp: 3,
+		weapon: {
+			id: utils.uuid(),
+			name: 'Fists',
+			damage: 1
+		}
 	});
 }
