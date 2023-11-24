@@ -1,5 +1,5 @@
 // factories that allow the generation of game objects like player, enemy, etc.
-import type { Character } from './types';
+import type { Character, Item } from './types';
 import * as utils from '$lib/utils';
 
 function createCharacter(options: any = {}): Character {
@@ -10,11 +10,21 @@ function createCharacter(options: any = {}): Character {
 	};
 }
 
+function createItem(options: any): Item {
+	return {
+		id: utils.uuid(),
+		...options
+	};
+}
+
 export function createGameObject(what: string, options: any) {
 	let go: any;
 	switch (what) {
 		case 'character':
 			go = createCharacter(options);
+			break;
+		case 'item':
+			go = createItem(options);
 			break;
 		default:
 			throw new Error(`Unknown game object type: ${what}`);
@@ -28,12 +38,7 @@ export function createGame(options: any = {}) {
 		name: 'Hero',
 		type: 'hero',
 		hp: 10,
-		maxHp: 10,
-		weapon: {
-			id: utils.uuid,
-			name: 'Fists',
-			damage: 1
-		}
+		maxHp: 10
 	});
 
 	const enemy = createGameObject('character', {

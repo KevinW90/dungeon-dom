@@ -1,14 +1,12 @@
 import { uuid } from './utils';
 
-export const weapons = {
-	stick: {
-		id: uuid(),
-		name: 'Stick',
-		damage: 2
-	},
-	basicSword: {
-		id: uuid(),
+export const weapons = [
+	{
 		name: 'Basic Sword',
 		damage: 3
+	},
+	{
+		name: 'Stick',
+		damage: 2
 	}
-};
+];

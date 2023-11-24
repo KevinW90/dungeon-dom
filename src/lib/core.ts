@@ -60,17 +60,15 @@ export function equip(item: Item, character: Character) {
 	// copy of character
 	const characterCopy = { ...character };
 
+	const itemIndex = characterCopy.inventory.findIndex((i) => i?.id === item.id);
 	// check if the character has a weapon
-	if (characterCopy.weapon && characterCopy.weapon.name !== 'Fists') {
+
+	if (characterCopy.weapon) {
 		// replace the item in the inventory with the current weapon
-		characterCopy.inventory.unshift(characterCopy.weapon);
-	}
+		characterCopy.inventory.splice(itemIndex, 1, characterCopy.weapon);
+	} else characterCopy.inventory.splice(itemIndex, 1, null);
 
 	characterCopy.weapon = item as Weapon;
-
-	const itemIndex = characterCopy.inventory.findIndex((i) => i?.id === item.id);
-	if (character.weapon.name === 'Fists') characterCopy.inventory.splice(itemIndex, 1, null);
-	else characterCopy.inventory.splice(itemIndex, 1);
 
 	const gameCopy = { ...get(game) };
 	const characterIndex = gameCopy.objects.findIndex((go) => go.id === character.id);
