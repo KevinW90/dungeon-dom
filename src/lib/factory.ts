@@ -1,7 +1,7 @@
 // factories that allow the generation of game objects like player, enemy, etc.
 import type { Character, Item } from './types';
 import * as utils from '$lib/utils';
-import { BASIC_WEAPONS } from './weapons';
+import { BASIC_WEAPONS } from './items/weapons';
 
 function _createCharacter(options: any = {}): Character {
 	return {
@@ -40,7 +40,14 @@ export function createGame() {
 		type: 'hero',
 		hp: 10,
 		maxHp: 10,
-		weapon: createGameObject('item', BASIC_WEAPONS.sword)
+		weapon: createGameObject('item', BASIC_WEAPONS.sword),
+		armor: {
+			chest: null,
+			legs: null,
+			feet: null,
+			hands: null,
+			head: null
+		}
 	});
 
 	const enemy = createGameObject('character', {

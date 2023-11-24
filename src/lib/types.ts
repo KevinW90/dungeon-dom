@@ -9,13 +9,17 @@ export type Weapon = {
 	damage: number;
 	// other weapon properties
 	durability: number | null;
+	slot: 'weapon';
 };
 
 export type Armor = {
 	id: string;
+	type: string;
 	name: string;
 	defense: number;
 	// other armor properties
+	durability: number | null;
+	slot: 'chest' | 'legs' | 'feet' | 'hands' | 'head';
 };
 
 export type Item = Weapon | Armor;
@@ -28,11 +32,11 @@ export type Character = {
 	maxHp: number;
 	inventory: any[];
 	weapon: Weapon | null;
-	armor?: {
+	armor: {
+		head: Armor | null;
 		chest: Armor | null;
 		legs: Armor | null;
 		feet: Armor | null;
 		hands: Armor | null;
-		head: Armor | null;
 	};
 };

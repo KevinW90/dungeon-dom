@@ -1,10 +1,11 @@
 <script lang="ts">
-	import { addToInventory, attack } from '$lib/core';
+	import { addToInventory, attack, unequip } from '$lib/core';
 	import { calculateAttackPoints, calculateDefensePoints } from '$lib/utils';
 	import { createGameObject } from '$lib/factory';
 	import { game } from '$lib/stores';
 	import type { Character } from '$lib/types';
-	import { weapons } from '$lib/weapons';
+	import { weapons } from '$lib/items/weapons';
+	import { armors } from '$lib/items/armors';
 
 	let hero: Character, enemies: Character[];
 	$: {
@@ -16,6 +17,8 @@
 <button on:click={() => addToInventory(createGameObject('item', weapons[0]), hero)}
 	>Add weapon</button
 >
+<button on:click={() => addToInventory(createGameObject('item', armors[0]), hero)}>Add armor</button
+>
 {#if hero}
 	<div>{hero.id}</div>
 	<h1>{hero.name}</h1>
@@ -25,9 +28,15 @@
 	<div>
 		Weapon: {hero.weapon?.name}
 	</div>
-	<div>
-		Weapon ID: {hero.weapon?.id}
-	</div>
+	{#each Object.entries(hero.armor) as [slot, armor]}
+		<!-- svelte-ignore a11y-click-events-have-key-events -->
+		<!-- svelte-ignore a11y-no-static-element-interactions -->
+		<div on:click={() => unequip(armor, hero)}>
+			{slot}: {armor?.name || 'none'}
+			{armor?.id ? `| ${armor.id}` : ''}
+		</div>
+	{/each}
+
 	<button on:click={() => attack(hero, enemies[0])}>Attack</button>
 {/if}
 
