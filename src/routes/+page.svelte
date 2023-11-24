@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { addToInventory, attack, calculateDefensePoints, equip } from '$lib/core';
+	import { addToInventory, attack } from '$lib/core';
+	import { calculateAttackPoints, calculateDefensePoints } from '$lib/utils';
 	import { createGameObject } from '$lib/factory';
 	import { game } from '$lib/stores';
 	import type { Character } from '$lib/types';
@@ -13,22 +14,19 @@
 </script>
 
 <button on:click={() => addToInventory(createGameObject('item', weapons[0]), hero)}
-	>Add Basic Sword</button
->
-<button on:click={() => addToInventory(createGameObject('item', weapons[1]), hero)}
-	>Add Stick</button
+	>Add weapon</button
 >
 {#if hero}
 	<div>{hero.id}</div>
 	<h1>{hero.name}</h1>
 	<h2>HP: {hero.hp}/{hero.maxHp}</h2>
-	<h2>ATK: {hero.weapon?.damage || 1}</h2>
+	<h2>ATK: {calculateAttackPoints(hero)}</h2>
 	<h2>DEF: {calculateDefensePoints(hero)}</h2>
 	<div>
-		Weapon: {hero.weapon?.name || 'Fists'}
+		Weapon: {hero.weapon?.name}
 	</div>
 	<div>
-		Weapon ID: {hero.weapon?.id || 'N/A'}
+		Weapon ID: {hero.weapon?.id}
 	</div>
 	<button on:click={() => attack(hero, enemies[0])}>Attack</button>
 {/if}
@@ -38,7 +36,7 @@
 		<div>{enemy.id}</div>
 		<h1>{enemy.name}</h1>
 		<h2>HP: {enemy.hp}/{enemy.maxHp}</h2>
-		<h2>ATK: {enemy.weapon.damage}</h2>
+		<h2>ATK: {calculateAttackPoints(enemy)}</h2>
 		<h2>DEF: {calculateDefensePoints(enemy)}</h2>
 		<button on:click={() => attack(enemy, hero)}>Attack</button>
 	{/each}

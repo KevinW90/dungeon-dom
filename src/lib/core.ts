@@ -1,24 +1,21 @@
 import { get } from 'svelte/store';
 import type { Character, Item, Weapon } from './types';
 import { game } from './stores';
-
-export const defaultGame = {
-	objects: []
-};
-
-export function calculateDefensePoints(character: Character): number {
-	return character.armor
-		? Object.values(character.armor).reduce((total, piece) => {
-				return total + (piece.defense || 0);
-		  }, 0)
-		: 0;
-}
+import { calculateAttackPoints, calculateDefensePoints } from './utils';
 
 export function attack(attacker: Character, defender: Character): void {
-	// total defense points is all armor points
-
+	// check the durability of the weapon used
+	const attCopy = { ...attacker };
+	if (attCopy.weapon?.durability) {
+		attCopy.weapon.durability--;
+		if (attCopy.weapon.durability <= 0) {
+			const basicWeapon = attCopy.inventory.find((i) => i && !i.durability) || null;
+			attCopy.weapon = null;
+			equip(basicWeapon, attCopy);
+		}
+	}
 	// damage is at least 1
-	const damage = Math.max(1, attacker.weapon.damage - calculateDefensePoints(defender));
+	const damage = Math.max(1, calculateAttackPoints(attacker) - calculateDefensePoints(defender));
 	takeDamage(defender, damage);
 }
 
@@ -56,11 +53,11 @@ export function addToInventory(item: Item, character: Character): void {
 	}
 }
 
-export function equip(item: Item, character: Character) {
+export function equip(item: Item | null, character: Character) {
 	// copy of character
 	const characterCopy = { ...character };
 
-	const itemIndex = characterCopy.inventory.findIndex((i) => i?.id === item.id);
+	const itemIndex = characterCopy.inventory.findIndex((i) => i?.id === item?.id);
 	// check if the character has a weapon
 
 	if (characterCopy.weapon) {

@@ -4,9 +4,11 @@ export type Game = {
 
 export type Weapon = {
 	id: string;
+	type: string;
 	name: string;
 	damage: number;
 	// other weapon properties
+	durability: number | null;
 };
 
 export type Armor = {
@@ -25,12 +27,12 @@ export type Character = {
 	hp: number;
 	maxHp: number;
 	inventory: any[];
-	weapon: Weapon;
+	weapon: Weapon | null;
 	armor?: {
-		chest: Armor;
-		legs: Armor;
-		feet: Armor;
-		hands: Armor;
-		head: Armor;
+		chest: Armor | null;
+		legs: Armor | null;
+		feet: Armor | null;
+		hands: Armor | null;
+		head: Armor | null;
 	};
 };

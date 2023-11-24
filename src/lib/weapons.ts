@@ -1,12 +1,31 @@
-import { uuid } from './utils';
+export const BASIC_WEAPONS = {
+	// warrior
+	sword: {
+		name: 'Basic Sword',
+		damage: 1,
+		durability: null,
+		type: 'basic'
+	},
+	// archer
+	bow: {
+		name: 'Basic Bow',
+		damage: 1,
+		durability: null,
+		type: 'basic'
+	},
+	// mage
+	staff: {
+		name: 'Basic Staff',
+		damage: 1,
+		durability: null,
+		type: 'basic'
+	}
+};
 
 export const weapons = [
 	{
-		name: 'Basic Sword',
-		damage: 3
-	},
-	{
 		name: 'Stick',
-		damage: 2
+		damage: 1,
+		durability: 1
 	}
 ];

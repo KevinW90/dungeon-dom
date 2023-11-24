@@ -1,16 +1,17 @@
 // factories that allow the generation of game objects like player, enemy, etc.
 import type { Character, Item } from './types';
 import * as utils from '$lib/utils';
+import { BASIC_WEAPONS } from './weapons';
 
-function createCharacter(options: any = {}): Character {
+function _createCharacter(options: any = {}): Character {
 	return {
 		id: utils.uuid(),
 		...options,
-		inventory: new Array(12)
+		inventory: options.type === 'hero' ? new Array(12) : new Array(6)
 	};
 }
 
-function createItem(options: any): Item {
+function _createItem(options: any): Item {
 	return {
 		id: utils.uuid(),
 		...options
@@ -21,10 +22,10 @@ export function createGameObject(what: string, options: any) {
 	let go: any;
 	switch (what) {
 		case 'character':
-			go = createCharacter(options);
+			go = _createCharacter(options);
 			break;
 		case 'item':
-			go = createItem(options);
+			go = _createItem(options);
 			break;
 		default:
 			throw new Error(`Unknown game object type: ${what}`);
@@ -33,24 +34,20 @@ export function createGameObject(what: string, options: any) {
 	return go;
 }
 
-export function createGame(options: any = {}) {
+export function createGame() {
 	const hero = createGameObject('character', {
 		name: 'Hero',
 		type: 'hero',
 		hp: 10,
-		maxHp: 10
+		maxHp: 10,
+		weapon: createGameObject('item', BASIC_WEAPONS.sword)
 	});
 
 	const enemy = createGameObject('character', {
 		name: 'skeleton',
 		type: 'enemy',
 		hp: 3,
-		maxHp: 3,
-		weapon: {
-			id: utils.uuid(),
-			name: 'Fists',
-			damage: 1
-		}
+		maxHp: 3
 	});
 
 	return {
