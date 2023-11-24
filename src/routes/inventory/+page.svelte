@@ -7,7 +7,9 @@
 <div class="container">
 	<div class="inventory">
 		{#each inventory as item}
-			<div class="inventory-slot"></div>
+			<div class="inventory-slot">
+				{item?.name}
+			</div>
 		{/each}
 	</div>
 </div>

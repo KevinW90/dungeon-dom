@@ -38,3 +38,15 @@ export function takeDamage(defender: Character, damage: number): void {
 		};
 	});
 }
+
+export function addToInventory(item: any, character: Character): void {
+	let freeSpaceIndex = character.inventory.findIndex((slot) => !slot);
+
+	if (freeSpaceIndex !== -1) {
+		const characterCopy = { ...character };
+		characterCopy.inventory[freeSpaceIndex] = item;
+
+		const goCharacterIndex = get(game).objects.findIndex((go) => go.id === character.id);
+		get(game).objects.splice(goCharacterIndex, 1, characterCopy);
+	}
+}

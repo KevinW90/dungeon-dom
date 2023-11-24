@@ -1,6 +1,7 @@
 // factories that allow the generation of game objects like player, enemy, etc.
 import type { Character } from './types';
 import * as utils from '$lib/utils';
+import { addToInventory } from './core';
 
 function createCharacter(options: any = {}): Character {
 	return {
@@ -30,9 +31,9 @@ export function createGame(options: any = {}) {
 		hp: 10,
 		maxHp: 10,
 		weapon: {
-			id: utils.uuid(),
-			name: 'Basic Sword',
-			damage: 3
+			id: utils.uuid,
+			name: 'Fists',
+			damage: 1
 		}
 	});
 
