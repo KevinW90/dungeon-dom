@@ -1,13 +1,7 @@
 <script lang="ts">
 	import { attack, calculateDefensePoints } from '$lib/core';
-	import * as factory from '$lib/factory';
 	import { game } from '$lib/stores';
 	import type { Character } from '$lib/types';
-	import { onMount } from 'svelte';
-
-	onMount(() => {
-		factory.createGame();
-	});
 
 	let hero: Character, enemies: Character[];
 	$: {
@@ -37,3 +31,5 @@
 {:else}
 	<h1>Loading...</h1>
 {/if}
+
+<a href="/inventory">inventory</a>

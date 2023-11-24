@@ -1,14 +1,12 @@
 // factories that allow the generation of game objects like player, enemy, etc.
-import { game } from './stores';
 import type { Character } from './types';
 import * as utils from '$lib/utils';
-import { defaultGame } from './core';
 
 function createCharacter(options: any = {}): Character {
 	return {
 		id: utils.uuid(),
 		...options,
-		inventory: []
+		inventory: new Array(12)
 	};
 }
 
@@ -22,19 +20,11 @@ export function createGameObject(what: string, options: any) {
 			throw new Error(`Unknown game object type: ${what}`);
 	}
 
-	game.update((g) => {
-		return {
-			...g,
-			objects: [...g.objects, go]
-		};
-	});
+	return go;
 }
 
 export function createGame(options: any = {}) {
-	// code saves cause extra characters
-	game.set({ ...defaultGame });
-
-	createGameObject('character', {
+	const hero = createGameObject('character', {
 		name: 'Hero',
 		type: 'hero',
 		hp: 10,
@@ -46,7 +36,7 @@ export function createGame(options: any = {}) {
 		}
 	});
 
-	createGameObject('character', {
+	const enemy = createGameObject('character', {
 		name: 'skeleton',
 		type: 'enemy',
 		hp: 3,
@@ -57,4 +47,8 @@ export function createGame(options: any = {}) {
 			damage: 1
 		}
 	});
+
+	return {
+		objects: [hero, enemy]
+	};
 }
