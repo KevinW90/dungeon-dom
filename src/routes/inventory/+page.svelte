@@ -1,14 +1,18 @@
 <script lang="ts">
+	import { equip } from '$lib/core';
 	import { game } from '$lib/stores';
 
 	$: inventory = $game.objects.find((go) => go.type === 'hero')!.inventory;
+	$: hero = $game.objects.find((go) => go.type === 'hero')!;
 </script>
 
 <div class="container">
 	<div class="inventory">
 		{#each inventory as item}
-			<div class="inventory-slot">
-				{item?.name}
+			<!-- svelte-ignore a11y-click-events-have-key-events -->
+			<!-- svelte-ignore a11y-no-static-element-interactions -->
+			<div class="inventory-slot" on:click={() => equip(item, hero)}>
+				{item?.name || ''}
 			</div>
 		{/each}
 	</div>

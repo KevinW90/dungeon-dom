@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { addToInventory, attack, calculateDefensePoints } from '$lib/core';
+	import { addToInventory, attack, calculateDefensePoints, equip } from '$lib/core';
 	import { game } from '$lib/stores';
 	import type { Character } from '$lib/types';
-	import { uuid } from '$lib/utils';
+	import { weapons } from '$lib/weapons';
 
 	let hero: Character, enemies: Character[];
 	$: {
@@ -11,17 +11,8 @@
 	}
 </script>
 
-<button
-	on:click={() =>
-		addToInventory(
-			{
-				id: uuid(),
-				name: 'Basic Sword',
-				damage: 3
-			},
-			hero
-		)}>Add Basic Sword</button
->
+<button on:click={() => addToInventory(weapons.basicSword, hero)}>Add Basic Sword</button>
+<button on:click={() => addToInventory(weapons.stick, hero)}>Add Stick</button>
 {#if hero}
 	<div>{hero.id}</div>
 	<h1>{hero.name}</h1>

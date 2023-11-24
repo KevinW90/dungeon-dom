@@ -1,5 +1,5 @@
 import { get } from 'svelte/store';
-import type { Character } from './types';
+import type { Character, Item, Weapon } from './types';
 import { game } from './stores';
 
 export const defaultGame = {
@@ -39,7 +39,7 @@ export function takeDamage(defender: Character, damage: number): void {
 	});
 }
 
-export function addToInventory(item: any, character: Character): void {
+export function addToInventory(item: Item, character: Character): void {
 	let freeSpaceIndex = character.inventory.findIndex((slot) => !slot);
 
 	if (freeSpaceIndex !== -1) {
@@ -48,5 +48,34 @@ export function addToInventory(item: any, character: Character): void {
 
 		const goCharacterIndex = get(game).objects.findIndex((go) => go.id === character.id);
 		get(game).objects.splice(goCharacterIndex, 1, characterCopy);
+		game.update((g) => {
+			return {
+				...g
+			};
+		});
 	}
+}
+
+export function equip(item: Item, character: Character) {
+	// copy of character
+	const characterCopy = { ...character };
+
+	// check if the character has a weapon
+	if (characterCopy.weapon && characterCopy.weapon.name !== 'Fists') {
+		// replace the item in the inventory with the current weapon
+		characterCopy.inventory.unshift(characterCopy.weapon);
+	}
+
+	characterCopy.weapon = item as Weapon;
+
+	const itemIndex = characterCopy.inventory.findIndex((i) => i?.id === item.id);
+	if (character.weapon.name === 'Fists') characterCopy.inventory.splice(itemIndex, 1, null);
+	else characterCopy.inventory.splice(itemIndex, 1);
+
+	const gameCopy = { ...get(game) };
+	const characterIndex = gameCopy.objects.findIndex((go) => go.id === character.id);
+	gameCopy.objects.splice(characterIndex, 1, characterCopy);
+
+	// Update the game store with the modified game object
+	game.update((g) => ({ ...g, ...gameCopy }));
 }

@@ -16,6 +16,8 @@ export type Armor = {
 	// other armor properties
 };
 
+export type Item = Weapon | Armor;
+
 export type Character = {
 	id: string;
 	name: string;

@@ -1,7 +1,6 @@
 // factories that allow the generation of game objects like player, enemy, etc.
 import type { Character } from './types';
 import * as utils from '$lib/utils';
-import { addToInventory } from './core';
 
 function createCharacter(options: any = {}): Character {
 	return {
