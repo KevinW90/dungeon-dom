@@ -59,6 +59,24 @@
 
 	// tiles
 	let tiles = new Array(25);
+	tiles[5] = createGameObject('character', {
+		type: 'enemy',
+		name: 'goblin',
+		hp: 3,
+		maxHp: 3
+	});
+	tiles[3] = createGameObject('character', {
+		type: 'enemy',
+		name: 'goblin',
+		hp: 3,
+		maxHp: 3
+	});
+	tiles[22] = createGameObject('character', {
+		type: 'enemy',
+		name: 'goblin',
+		hp: 3,
+		maxHp: 3
+	});
 </script>
 
 <div id="game-screen">
@@ -84,7 +102,25 @@
 
 		<div id="game-map" style="--t-width: {tileWidth}px;">
 			{#each tiles as tile}
-				<div class="tile"></div>
+				<div class="tile">
+					{#if tile?.type === 'enemy'}
+						<img src="/enemies/Goblin_Idle_000.png" alt="enemy" />
+						<div class="stats">
+							<div class="hp">
+								<Icon icon="solar:heart-bold" />
+								<span>{tile.hp}</span>
+							</div>
+							<div class="atk">
+								<Icon icon="mingcute:sword-fill" />
+								<span>{calculateAttackPoints(tile)}</span>
+							</div>
+							<div class="def">
+								<Icon icon="ic:round-shield" />
+								<span>{calculateDefensePoints(tile)}</span>
+							</div>
+						</div>
+					{/if}
+				</div>
 			{/each}
 		</div>
 
@@ -218,6 +254,7 @@
 		gap: 1px;
 
 		.tile {
+			position: relative;
 			border-radius: 1rem;
 			&:nth-child(even) {
 				background-color: $color-dark-lite;
@@ -225,6 +262,30 @@
 
 			&:nth-child(odd) {
 				background-color: $color-dark;
+			}
+
+			img {
+				width: 175%;
+				height: 175%;
+				object-fit: contain;
+
+				translate: -30% -30%;
+			}
+
+			.stats {
+				position: absolute;
+				top: 0;
+				right: 0;
+				z-index: 1;
+
+				scale: 0.5;
+				translate: 0.5rem -0.5rem;
+
+				> div {
+					display: flex;
+					align-items: center;
+					gap: 0.5rem;
+				}
 			}
 		}
 	}
@@ -243,5 +304,16 @@
 
 	:global(.option:first-child .iconify, .option:last-child .iconify) {
 		font-size: 3rem;
+	}
+
+	@media screen and (min-width: 550px) {
+		#game-map {
+			.tile {
+				.stats {
+					scale: 0.75;
+					translate: 0 25%;
+				}
+			}
+		}
 	}
 </style>
