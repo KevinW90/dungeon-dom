@@ -6,13 +6,88 @@
 	import type { Character } from '$lib/types';
 	import { weapons } from '$lib/items/weapons';
 	import { armors } from '$lib/items/armors';
+	import Icon from '@iconify/svelte';
+	import { onMount } from 'svelte';
 
 	let hero: Character, enemies: Character[];
 	$: {
 		hero = $game.objects?.find((go) => go?.type === 'hero')!;
 		enemies = $game.objects?.filter((go) => go?.type === 'enemy');
 	}
+
+	// game map is a 5x5 tile grid
+	// gutter on sides is 3/4 tile width
+	let screenSize = { width: 0, height: 0 };
+	let tileWidth = 0;
+	let gutterSize = 0;
+
+	// Update screen size and calculate tile width and gutter size on mount
+	onMount(() => {
+		updateScreenSize();
+		calculateSizes();
+		// Update screen size on resize
+		window.addEventListener('resize', handleResize);
+
+		return () => {
+			window.removeEventListener('resize', handleResize);
+		};
+	});
+
+	// Function to update screen size
+	function updateScreenSize() {
+		screenSize = {
+			width: window.innerWidth,
+			height: window.innerHeight
+		};
+		console.log(screenSize);
+	}
+
+	// Function to calculate tile width and gutter size
+	function calculateSizes() {
+		tileWidth = screenSize.width / 7; // 7 columns (5 tiles + 2 gutters)
+		gutterSize = tileWidth * 0.75;
+		console.log('tileWidth', tileWidth);
+		console.log('gutter', gutterSize);
+	}
+
+	function handleResize() {
+		updateScreenSize();
+		calculateSizes();
+	}
 </script>
+
+<div id="game-screen">
+	<div class="container" style="--gutter: {gutterSize}px">
+		<div id="top-bar">
+			<div class="left">
+				<div class="gold-count">
+					<Icon icon="akar-icons:coin" class="gold" />
+					<span>42</span>
+				</div>
+				<div class="key-count">
+					<Icon icon="solar:key-bold" class="gold" />
+					<span>03</span>
+				</div>
+			</div>
+			<div class="right">
+				<div class="level-count">room 7</div>
+				<div class="settings">
+					<Icon icon="solar:settings-bold" />
+				</div>
+			</div>
+		</div>
+
+		<div id="game-map">tile map</div>
+
+		<div id="player-options">
+			<div class="option">option 1</div>
+			<div class="option">option 2</div>
+			<div class="option">option 3</div>
+			<div class="option">option 4</div>
+			<div class="option">option 5</div>
+		</div>
+	</div>
+</div>
 
 <button on:click={() => addToInventory(createGameObject('item', weapons[0]), hero)}
 	>Add weapon</button
@@ -54,3 +129,74 @@
 {/if}
 
 <a href="/inventory">inventory</a>
+
+<style lang="scss">
+	@import '../global.scss';
+
+	.container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		height: 100vh;
+		width: 100vw;
+		background-color: $color-dark-dark;
+		color: #fff;
+		padding: 0 var(--gutter);
+	}
+
+	#top-bar {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		width: 100%;
+
+		background-color: $color-dark;
+		border: 3px solid $color-dark-lite;
+		border-top: none;
+		border-radius: 0 0 0.5rem 0.5rem;
+
+		.left,
+		.right {
+			display: flex;
+			gap: 1rem;
+
+			padding: 1rem;
+
+			> div {
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
+			}
+		}
+
+		.gold-count,
+		.key-count {
+			color: $color-gold-lite;
+
+			span {
+				color: white;
+			}
+		}
+	}
+
+	#game-map {
+		height: 50vh;
+		width: 100%;
+	}
+
+	#player-options {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		height: 50vh;
+		width: 100%;
+	}
+
+	.option {
+		margin: 0.5rem;
+		padding: 0.5rem;
+		color: #fff;
+	}
+</style>

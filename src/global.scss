@@ -1,0 +1,23 @@
+@font-face {
+	font-family: 'Emotional Baggage';
+	src: url('./lib/fonts/EmotionalBaggage-Regular.ttf');
+}
+
+:global(*) {
+	box-sizing: border-box;
+}
+:global(html, body) {
+	margin: 0;
+	padding: 0;
+	font-family: 'Emotional Baggage';
+}
+:global(.iconify) {
+	font-size: 1.5rem;
+}
+
+$color-dark-dark: #171c20;
+$color-dark: #2d3137;
+$color-dark-lite: #384040;
+
+$color-gold: #cba86a;
+$color-gold-lite: #f0c471;
