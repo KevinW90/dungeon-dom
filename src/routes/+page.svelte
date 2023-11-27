@@ -89,11 +89,24 @@
 		</div>
 
 		<div id="player-options">
-			<div class="option">option 1</div>
-			<div class="option">option 2</div>
-			<div class="option">option 3</div>
-			<div class="option">option 4</div>
-			<div class="option">option 5</div>
+			<div class="option">
+				<Icon icon="game-icons:backpack" />
+			</div>
+			<div class="option">
+				<Icon icon="solar:heart-bold" />
+				<span>10</span>
+			</div>
+			<div class="option">
+				<Icon icon="mingcute:sword-fill" />
+				<span>1</span>
+			</div>
+			<div class="option">
+				<Icon icon="ic:round-shield" />
+				<span>0</span>
+			</div>
+			<div class="option">
+				<Icon icon="ic:round-question-mark" />
+			</div>
 		</div>
 	</div>
 </div>
@@ -171,13 +184,19 @@
 			display: flex;
 			gap: 1rem;
 
-			padding: 1rem;
-
 			> div {
 				display: flex;
 				align-items: center;
 				gap: 0.5rem;
 			}
+		}
+
+		.left {
+			padding: 1rem 0 1rem 1rem;
+		}
+
+		.right {
+			padding: 1rem 1rem 1rem 0;
 		}
 
 		.gold-count,
@@ -212,16 +231,17 @@
 
 	#player-options {
 		display: flex;
-		flex-direction: column;
 		align-items: center;
-		justify-content: center;
-		height: 50vh;
+		justify-content: space-between;
 		width: 100%;
 	}
 
 	.option {
-		margin: 0.5rem;
-		padding: 0.5rem;
+		display: flex;
 		color: #fff;
+	}
+
+	:global(.option:first-child .iconify, .option:last-child .iconify) {
+		font-size: 3rem;
 	}
 </style>
