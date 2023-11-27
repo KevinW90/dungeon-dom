@@ -274,17 +274,35 @@
 
 			.stats {
 				position: absolute;
+				width: 100%;
+				height: 100%;
 				top: 0;
-				right: 0;
+				left: 0;
 				z-index: 1;
 
-				scale: 0.5;
-				translate: 0.5rem -0.5rem;
+				.hp {
+					top: 5px;
+					right: 5px;
+					translate: 15% -15%;
+				}
+
+				.atk {
+					bottom: 5px;
+					left: 5px;
+					translate: -15% 15%;
+				}
+
+				.def {
+					bottom: 5px;
+					right: 5px;
+					translate: 15% 15%;
+				}
 
 				> div {
+					position: absolute;
 					display: flex;
 					align-items: center;
-					gap: 0.5rem;
+					scale: 0.5;
 				}
 			}
 		}
@@ -306,12 +324,36 @@
 		font-size: 3rem;
 	}
 
+	@media screen and (min-width: 375px) {
+		#game-map {
+			.tile {
+				.stats {
+					> div {
+						scale: 0.75;
+					}
+				}
+			}
+		}
+	}
 	@media screen and (min-width: 550px) {
 		#game-map {
 			.tile {
 				.stats {
-					scale: 0.75;
-					translate: 0 25%;
+					> div {
+						scale: 1;
+					}
+
+					.hp {
+						translate: 0% -15%;
+					}
+
+					.atk {
+						translate: -15% 0%;
+					}
+
+					.def {
+						translate: 0 0;
+					}
 				}
 			}
 		}
