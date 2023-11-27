@@ -44,16 +44,21 @@
 
 	// Function to calculate tile width and gutter size
 	function calculateSizes() {
-		tileWidth = screenSize.width / 7; // 7 columns (5 tiles + 2 gutters)
+		tileWidth = (screenSize.width - 4) / 6.5; // 7 columns (5 tiles + 2(.75) gutters)
 		gutterSize = tileWidth * 0.75;
 		console.log('tileWidth', tileWidth);
 		console.log('gutter', gutterSize);
+
+		console.log('total', tileWidth * 5 + 2 * gutterSize);
 	}
 
 	function handleResize() {
 		updateScreenSize();
 		calculateSizes();
 	}
+
+	// tiles
+	let tiles = new Array(25);
 </script>
 
 <div id="game-screen">
@@ -77,7 +82,11 @@
 			</div>
 		</div>
 
-		<div id="game-map">tile map</div>
+		<div id="game-map" style="--t-width: {tileWidth}px;">
+			{#each tiles as tile}
+				<div class="tile"></div>
+			{/each}
+		</div>
 
 		<div id="player-options">
 			<div class="option">option 1</div>
@@ -136,8 +145,9 @@
 	.container {
 		display: flex;
 		flex-direction: column;
-		align-items: center;
-		justify-content: center;
+		// align-items: center;
+		// justify-content: center;
+		gap: 2rem;
 		height: 100vh;
 		width: 100vw;
 		background-color: $color-dark-dark;
@@ -181,8 +191,23 @@
 	}
 
 	#game-map {
-		height: 50vh;
 		width: 100%;
+
+		display: grid;
+		grid-template-columns: repeat(5, var(--t-width));
+		grid-template-rows: repeat(5, var(--t-width));
+		gap: 1px;
+
+		.tile {
+			border-radius: 1rem;
+			&:nth-child(even) {
+				background-color: $color-dark-lite;
+			}
+
+			&:nth-child(odd) {
+				background-color: $color-dark;
+			}
+		}
 	}
 
 	#player-options {
