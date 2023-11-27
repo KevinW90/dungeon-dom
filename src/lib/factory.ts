@@ -50,14 +50,35 @@ export function createGame() {
 		}
 	});
 
-	const enemy = createGameObject('character', {
-		name: 'skeleton',
+	let tiles = new Array(25);
+	tiles[5] = {};
+	tiles[3] = {};
+	tiles[22] = {};
+	tiles[5].content = createGameObject('character', {
 		type: 'enemy',
+		name: 'goblin',
+		hp: 3,
+		maxHp: 3
+	});
+	tiles[3].content = createGameObject('character', {
+		type: 'enemy',
+		name: 'goblin',
+		hp: 3,
+		maxHp: 3
+	});
+	tiles[22].content = createGameObject('character', {
+		type: 'enemy',
+		name: 'goblin',
 		hp: 3,
 		maxHp: 3
 	});
 
+	console.log(tiles);
 	return {
-		objects: [hero, enemy]
+		hero,
+		room: {
+			id: utils.uuid(),
+			tiles
+		}
 	};
 }

@@ -27,13 +27,14 @@ export function takeDamage(defender: Character, damage: number): void {
 	};
 
 	// replace the game object's stats
-	const goCharacterIndex = get(game).objects.findIndex((go) => go.id === defender.id);
-	get(game).objects.splice(goCharacterIndex, 1, newDefenderStats);
-	game.update((g) => {
-		return {
-			...g
-		};
-	});
+	console.log('defender', defender);
+	const ndx = get(game).room.tiles.findIndex((t) => t?.content?.id === defender.id);
+	console.log(ndx);
+	const gameCopy = { ...get(game) };
+	gameCopy.room.tiles[ndx].content = newDefenderStats;
+
+	// Update the game store with the modified game object
+	game.update((g) => ({ ...g, ...gameCopy }));
 }
 
 export function addToInventory(item: Item, character: Character): void {
@@ -43,13 +44,12 @@ export function addToInventory(item: Item, character: Character): void {
 		const characterCopy = { ...character };
 		characterCopy.inventory[freeSpaceIndex] = item;
 
-		const goCharacterIndex = get(game).objects.findIndex((go) => go.id === character.id);
-		get(game).objects.splice(goCharacterIndex, 1, characterCopy);
-		game.update((g) => {
-			return {
-				...g
-			};
-		});
+		const ndx = get(game).room.tiles.findIndex((t) => t?.content?.id === character.id);
+		const gameCopy = { ...get(game) };
+		gameCopy.room.tiles[ndx].content = characterCopy;
+
+		// Update the game store with the modified game object
+		game.update((g) => ({ ...g, ...gameCopy }));
 	}
 }
 
@@ -86,8 +86,7 @@ export function equip(item: Item | null, character: Character) {
 	}
 
 	const gameCopy = { ...get(game) };
-	const characterIndex = gameCopy.objects.findIndex((go) => go.id === character.id);
-	gameCopy.objects.splice(characterIndex, 1, characterCopy);
+	gameCopy.hero = characterCopy;
 
 	// Update the game store with the modified game object
 	game.update((g) => ({ ...g, ...gameCopy }));
@@ -112,8 +111,7 @@ export function unequip(item: Armor | null, character: Character) {
 
 	// update the game object
 	const gameCopy = { ...get(game) };
-	const characterIndex = gameCopy.objects.findIndex((go) => go.id === character.id);
-	gameCopy.objects.splice(characterIndex, 1, characterCopy);
+	gameCopy.hero = characterCopy;
 
 	// Update the game store with the modified game object
 	game.update((g) => ({ ...g, ...gameCopy }));

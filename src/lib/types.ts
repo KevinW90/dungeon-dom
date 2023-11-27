@@ -1,5 +1,15 @@
 export type Game = {
-	objects: Character[];
+	hero: Character;
+	room: Room;
+};
+
+export type Room = {
+	id: string;
+	tiles: Tile[];
+};
+
+export type Tile = {
+	content: any;
 };
 
 export type Weapon = {

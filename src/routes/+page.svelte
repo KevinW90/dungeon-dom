@@ -11,8 +11,7 @@
 
 	let hero: Character, enemies: Character[];
 	$: {
-		hero = $game.objects?.find((go) => go?.type === 'hero')!;
-		enemies = $game.objects?.filter((go) => go?.type === 'enemy');
+		hero = $game.hero;
 	}
 
 	// game map is a 5x5 tile grid
@@ -57,26 +56,12 @@
 		calculateSizes();
 	}
 
-	// tiles
-	let tiles = new Array(25);
-	tiles[5] = createGameObject('character', {
-		type: 'enemy',
-		name: 'goblin',
-		hp: 3,
-		maxHp: 3
-	});
-	tiles[3] = createGameObject('character', {
-		type: 'enemy',
-		name: 'goblin',
-		hp: 3,
-		maxHp: 3
-	});
-	tiles[22] = createGameObject('character', {
-		type: 'enemy',
-		name: 'goblin',
-		hp: 3,
-		maxHp: 3
-	});
+	function handleInteraction(tile: any) {
+		console.log(tile);
+		if (tile?.content.type === 'enemy') {
+			attack(hero, tile.content);
+		}
+	}
 </script>
 
 <div id="game-screen">
@@ -101,26 +86,28 @@
 		</div>
 
 		<div id="game-map" style="--t-width: {tileWidth}px;">
-			{#each tiles as tile}
-				<div class="tile">
-					{#if tile?.type === 'enemy'}
+			{#each $game.room.tiles as tile}
+				<button class="tile" on:click={() => handleInteraction(tile)}>
+					{#if tile?.content && tile.content.type === 'enemy'}
 						<img src="/enemies/Goblin_Idle_000.png" alt="enemy" />
 						<div class="stats">
 							<div class="hp">
-								<Icon icon="solar:heart-bold" />
-								<span>{tile.hp}</span>
+								{#if 'hp' in tile.content}
+									<Icon icon="solar:heart-bold" />
+									<span>{tile.content.hp}</span>
+								{/if}
 							</div>
 							<div class="atk">
 								<Icon icon="mingcute:sword-fill" />
-								<span>{calculateAttackPoints(tile)}</span>
+								<span>{calculateAttackPoints(tile.content)}</span>
 							</div>
 							<div class="def">
 								<Icon icon="ic:round-shield" />
-								<span>{calculateDefensePoints(tile)}</span>
+								<span>{calculateDefensePoints(tile.content)}</span>
 							</div>
 						</div>
 					{/if}
-				</div>
+				</button>
 			{/each}
 		</div>
 
@@ -146,47 +133,6 @@
 		</div>
 	</div>
 </div>
-
-<button on:click={() => addToInventory(createGameObject('item', weapons[0]), hero)}
-	>Add weapon</button
->
-<button on:click={() => addToInventory(createGameObject('item', armors[0]), hero)}>Add armor</button
->
-{#if hero}
-	<div>{hero.id}</div>
-	<h1>{hero.name}</h1>
-	<h2>HP: {hero.hp}/{hero.maxHp}</h2>
-	<h2>ATK: {calculateAttackPoints(hero)}</h2>
-	<h2>DEF: {calculateDefensePoints(hero)}</h2>
-	<div>
-		Weapon: {hero.weapon?.name}
-	</div>
-	{#each Object.entries(hero.armor) as [slot, armor]}
-		<!-- svelte-ignore a11y-click-events-have-key-events -->
-		<!-- svelte-ignore a11y-no-static-element-interactions -->
-		<div on:click={() => unequip(armor, hero)}>
-			{slot}: {armor?.name || 'none'}
-			{armor?.id ? `| ${armor.id}` : ''}
-		</div>
-	{/each}
-
-	<button on:click={() => attack(hero, enemies[0])}>Attack</button>
-{/if}
-
-{#if enemies.length > 0}
-	{#each enemies as enemy}
-		<div>{enemy.id}</div>
-		<h1>{enemy.name}</h1>
-		<h2>HP: {enemy.hp}/{enemy.maxHp}</h2>
-		<h2>ATK: {calculateAttackPoints(enemy)}</h2>
-		<h2>DEF: {calculateDefensePoints(enemy)}</h2>
-		<button on:click={() => attack(enemy, hero)}>Attack</button>
-	{/each}
-{:else}
-	<h1>Loading...</h1>
-{/if}
-
-<a href="/inventory">inventory</a>
 
 <style lang="scss">
 	@import '../global.scss';
@@ -256,6 +202,11 @@
 		.tile {
 			position: relative;
 			border-radius: 1rem;
+
+			// override button styling
+			border: none;
+			color: white;
+
 			&:nth-child(even) {
 				background-color: $color-dark-lite;
 			}
