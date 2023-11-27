@@ -2,8 +2,8 @@
 	import { equip } from '$lib/core';
 	import { game } from '$lib/stores';
 
-	$: inventory = $game.objects.find((go) => go.type === 'hero')!.inventory;
-	$: hero = $game.objects.find((go) => go.type === 'hero')!;
+	$: inventory = $game.hero.inventory;
+	$: hero = $game.hero;
 </script>
 
 <div class="container">

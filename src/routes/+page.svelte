@@ -88,14 +88,12 @@
 		<div id="game-map" style="--t-width: {tileWidth}px;">
 			{#each $game.room.tiles as tile}
 				<button class="tile" on:click={() => handleInteraction(tile)}>
-					{#if tile?.content && tile.content.type === 'enemy'}
+					{#if tile?.content?.type === 'enemy'}
 						<img src="/enemies/Goblin_Idle_000.png" alt="enemy" />
 						<div class="stats">
 							<div class="hp">
-								{#if 'hp' in tile.content}
-									<Icon icon="solar:heart-bold" />
-									<span>{tile.content.hp}</span>
-								{/if}
+								<Icon icon="solar:heart-bold" />
+								<span>{tile.content.hp}</span>
 							</div>
 							<div class="atk">
 								<Icon icon="mingcute:sword-fill" />
@@ -113,7 +111,9 @@
 
 		<div id="player-options">
 			<div class="option">
-				<Icon icon="game-icons:backpack" />
+				<a href="/inventory">
+					<Icon icon="game-icons:backpack" />
+				</a>
 			</div>
 			<div class="option">
 				<Icon icon="solar:heart-bold" />
@@ -136,6 +136,11 @@
 
 <style lang="scss">
 	@import '../global.scss';
+
+	a {
+		text-decoration: none;
+		color: inherit;
+	}
 
 	.container {
 		display: flex;
