@@ -58,8 +58,13 @@
 
 	function handleInteraction(tile: any) {
 		console.log(tile);
-		if (tile?.content.type === 'enemy') {
+		if (tile?.content?.type === 'enemy') {
 			attack(hero, tile.content);
+		}
+		// TODO: check for other interactions
+		// nothing for now
+		else {
+			console.log('nothing here');
 		}
 	}
 </script>

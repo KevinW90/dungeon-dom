@@ -31,14 +31,17 @@ export function takeDamage(defender: Character, damage: number): void {
 	const ndx = get(game).room.tiles.findIndex((t) => t?.content?.id === defender.id);
 	console.log(ndx);
 	const gameCopy = { ...get(game) };
-	gameCopy.room.tiles[ndx].content = newDefenderStats;
 
+	// check if the defender is dead
+	gameCopy.room.tiles[ndx].content = newDefenderStats.hp <= 0 ? null : newDefenderStats;
 	// Update the game store with the modified game object
 	game.update((g) => ({ ...g, ...gameCopy }));
 }
 
 export function addToInventory(item: Item, character: Character): void {
 	let freeSpaceIndex = character.inventory.findIndex((slot) => !slot);
+
+	// TODO: use a guard clause to check if there is no free space in the inventory
 
 	if (freeSpaceIndex !== -1) {
 		const characterCopy = { ...character };

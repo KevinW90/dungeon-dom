@@ -50,7 +50,7 @@ export function createGame() {
 		}
 	});
 
-	let tiles = new Array(25);
+	let tiles = new Array(25).fill({ content: null });
 	tiles[5] = {};
 	tiles[3] = {};
 	tiles[22] = {};
