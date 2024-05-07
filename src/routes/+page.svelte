@@ -83,7 +83,7 @@
 				</div>
 			</div>
 			<div class="right">
-				<div class="level-count">room 7</div>
+				<div class="level-count">{$game.room.id}</div>
 				<div class="settings">
 					<Icon icon="solar:settings-bold" />
 				</div>
