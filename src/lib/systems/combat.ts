@@ -2,6 +2,7 @@ import { game } from '$lib/stores';
 import type { Character, Weapon } from '$lib/types';
 import { calculateAttackPoints, calculateDefensePoints } from '$lib/utils';
 import { get } from 'svelte/store';
+import { equipBasicWeapon, equipRandomWeapon } from './inventory';
 
 export function attack(attacker: Character, defender: Character): void {
 	console.log(`${attacker.name} attacks ${defender.name} with a ${attacker.weapon?.name}!`);
@@ -43,20 +44,10 @@ export function takeDamage(defender: Character, damage: number): void {
 
 function breakWeapon(character: Character, weapon: Weapon): void {
 	console.log(`${character.name}'s ${weapon.name} breaks!`);
-	character.weapon = null;
-	// equip the basic weapon (hero) or random weapon (enemy)
-	if (character.type === 'hero') {
-		// TODO: equipBasicWeapon(character);
-		const basicWeapon = character.inventory.find((i) => i?.type === 'basic')!;
-		character.weapon = basicWeapon;
-	} else {
-		// TODO: equipRandomWeapon(character);
-		const weapons = character.inventory.filter((i) => i?.damage > 0);
-		if (weapons.length === 0) return;
 
-		const randomWeapon = weapons[Math.floor(Math.random() * weapons.length)];
-		character.weapon = randomWeapon;
-	}
+	// equip the basic weapon (hero) or random weapon (enemy)
+	if (character.type === 'hero') return equipBasicWeapon();
+	equipRandomWeapon(character);
 }
 
 function die(character: Character): void {
