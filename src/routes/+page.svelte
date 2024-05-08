@@ -90,6 +90,8 @@
 			</div>
 		</div>
 
+		<div>Current Turn: {$game.turn.name} {$game.turn.id}</div>
+
 		<div id="game-map" style="--t-width: {tileWidth}px;">
 			{#each $game.room.tiles as tile}
 				<button class="tile" on:click={() => handleInteraction(tile)}>

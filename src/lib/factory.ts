@@ -61,7 +61,7 @@ export function createGame() {
 		hp: 10,
 		maxHp: 10,
 		inventory: new Array(12).fill(null),
-		weapon: createGameObject('item', weapons[0]),
+		weapon: createGameObject('item', BASIC_WEAPONS.sword),
 		armor: {
 			chest: null,
 			legs: null,
@@ -71,13 +71,11 @@ export function createGame() {
 		}
 	});
 
-	// testing basic weapon equip
-	hero.inventory[0] = createGameObject('item', BASIC_WEAPONS.sword);
-
 	const room = createRoom();
 
 	return {
 		hero,
-		room
+		room,
+		turn: hero
 	};
 }

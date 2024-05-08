@@ -12,3 +12,20 @@ export function updateCharacter(characterData: Character): void {
 
 	game.update((g) => ({ ...g, ...gameCopy }));
 }
+
+export function updateTurn(): void {
+	const gameCopy = { ...get(game) };
+	const currentTurn = gameCopy.turn;
+	const turnList = [
+		gameCopy.hero,
+		...gameCopy.room.tiles.filter((t) => t.content?.type === 'enemy').map((t) => t.content)
+	];
+	console.log('turn list', turnList);
+	const index = turnList.findIndex((t) => t.id === currentTurn.id);
+
+	// find the next character
+	let nextIndex = (index + 1) % turnList.length;
+
+	gameCopy.turn = turnList[nextIndex];
+	game.update((g) => ({ ...g, ...gameCopy }));
+}

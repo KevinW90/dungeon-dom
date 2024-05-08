@@ -3,7 +3,7 @@ import type { Character, Weapon } from '$lib/types';
 import { calculateAttackPoints, calculateDefensePoints } from '$lib/utils';
 import { get } from 'svelte/store';
 import { equipBasicWeapon, equipRandomWeapon } from './inventory';
-import { updateCharacter } from './update';
+import { updateCharacter, updateTurn } from './update';
 
 export function attack(attacker: Character, defender: Character): void {
 	console.log(`${attacker.name} attacks ${defender.name} with a ${attacker.weapon?.name}!`);
@@ -12,15 +12,13 @@ export function attack(attacker: Character, defender: Character): void {
 	const damage = Math.max(1, calculateAttackPoints(attacker) - calculateDefensePoints(defender));
 	takeDamage(defender, damage);
 
-	// check the current weapon durability
-	if (!attacker.weapon?.durability) return;
-
 	// handle weapon durability
-	attacker.weapon.durability -= 1;
-	if (attacker.weapon.durability > 0) return;
-	breakWeapon(attacker, attacker.weapon);
+	if (attacker.weapon?.durability) attacker.weapon.durability -= 1;
+	if (attacker.weapon?.durability && attacker.weapon?.durability <= 0)
+		breakWeapon(attacker, attacker.weapon!);
 
-	// no game update needed, takeDamage always fires an update
+	// TODO: update the turn
+	updateTurn();
 }
 
 export function takeDamage(defender: Character, damage: number): void {

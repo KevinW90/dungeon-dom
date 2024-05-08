@@ -1,6 +1,7 @@
 export type Game = {
 	hero: Character;
 	room: Room;
+	turn: Character;
 };
 
 export type Room = {
