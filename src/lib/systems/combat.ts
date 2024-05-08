@@ -9,6 +9,19 @@ export function attack(attacker: Character, defender: Character): void {
 	// damage is at least 1
 	const damage = Math.max(1, calculateAttackPoints(attacker) - calculateDefensePoints(defender));
 	takeDamage(defender, damage);
+
+	// check the current weapon durability
+	if (!attacker.weapon?.durability) return;
+
+	// reduce the weapon durability
+	attacker.weapon.durability -= 1;
+	// TODO: `breakWeapon` function
+	if (attacker.weapon?.durability > 0) return;
+	console.log(`${attacker.name}'s ${attacker.weapon.name} breaks!`);
+	attacker.weapon = null;
+	// equip the basic weapon
+	const basicWeapon = attacker.inventory.find((i) => i?.type === 'basic')!;
+	attacker.weapon = basicWeapon;
 }
 
 export function takeDamage(defender: Character, damage: number): void {

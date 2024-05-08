@@ -133,7 +133,7 @@
 				<span>0</span>
 			</div>
 			<div class="option">
-				<span>{$game.hero.weapon?.name}</span>
+				<span>{$game.hero.weapon?.name} {$game.hero.weapon?.durability}</span>
 				<!-- <Icon icon="ic:round-question-mark" /> -->
 			</div>
 		</div>
