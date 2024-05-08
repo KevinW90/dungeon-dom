@@ -58,6 +58,11 @@
 
 	function handleInteraction(tile: any) {
 		console.log(tile);
+		// TODO: check for hero turn
+		if ($game.turn.id !== $game.hero.id) {
+			console.log('not your turn');
+			return;
+		}
 		if (tile?.content?.type === 'enemy') {
 			attack(hero, tile.content);
 		}
@@ -124,11 +129,11 @@
 			</div>
 			<div class="option">
 				<Icon icon="solar:heart-bold" />
-				<span>10</span>
+				<span>{$game.hero.hp}</span>
 			</div>
 			<div class="option">
 				<Icon icon="mingcute:sword-fill" />
-				<span>1</span>
+				<span>{1}</span>
 			</div>
 			<div class="option">
 				<Icon icon="ic:round-shield" />

@@ -1,6 +1,7 @@
 import { game } from '$lib/stores';
 import type { Character } from '$lib/types';
 import { get } from 'svelte/store';
+import { attack } from './combat';
 
 export function updateCharacter(characterData: Character): void {
 	const gameCopy = { ...get(game) };
@@ -28,4 +29,7 @@ export function updateTurn(): void {
 
 	gameCopy.turn = turnList[nextIndex];
 	game.update((g) => ({ ...g, ...gameCopy }));
+
+	// TODO: handle enemy turn
+	if (gameCopy.turn.type === 'enemy') setTimeout(() => attack(gameCopy.turn, gameCopy.hero), 1000);
 }
