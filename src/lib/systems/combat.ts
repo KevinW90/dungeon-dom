@@ -30,14 +30,13 @@ export function takeDamage(defender: Character, damage: number): void {
 	};
 	console.log(newDefenderStats);
 
-	// replace the game object's stats
-	const ndx = get(game).room.tiles.findIndex((t) => t?.content?.id === defender.id);
-	console.log(ndx);
-	const gameCopy = { ...get(game) };
+	// check if defender is dead
+	if (newDefenderStats.hp <= 0) return die(defender);
 
-	// check if the defender is dead
-	// TODO: replace with a `die` function
-	gameCopy.room.tiles[ndx].content = newDefenderStats.hp <= 0 ? null : newDefenderStats;
+	// TODO: replace with a `updateCharacter` function
+	// replace the game object's stats
+	const gameCopy = { ...get(game) };
+	gameCopy.room.tiles.find((t) => t.content?.id === defender.id)!.content = newDefenderStats;
 	// Update the game store with the modified game object
 	game.update((g) => ({ ...g, ...gameCopy }));
 }
@@ -58,4 +57,11 @@ function breakWeapon(character: Character, weapon: Weapon): void {
 		const randomWeapon = weapons[Math.floor(Math.random() * weapons.length)];
 		character.weapon = randomWeapon;
 	}
+}
+
+function die(character: Character): void {
+	console.log(`${character.name} died!`);
+	const gameCopy = { ...get(game) };
+	gameCopy.room.tiles.find((t) => t.content?.id === character.id)!.content = null;
+	game.update((g) => ({ ...g, ...gameCopy }));
 }
