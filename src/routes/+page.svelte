@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { addToInventory, attack, unequip } from '$lib/core';
 	import { calculateAttackPoints, calculateDefensePoints } from '$lib/utils';
 	import { createGameObject } from '$lib/factory';
 	import { game } from '$lib/stores';
@@ -8,6 +7,7 @@
 	import { armors } from '$lib/items/armors';
 	import Icon from '@iconify/svelte';
 	import { onMount } from 'svelte';
+	import { attack } from '$lib/systems/combat';
 
 	let hero: Character, enemies: Character[];
 	$: {
@@ -133,7 +133,8 @@
 				<span>0</span>
 			</div>
 			<div class="option">
-				<Icon icon="ic:round-question-mark" />
+				<span>{$game.hero.weapon?.name}</span>
+				<!-- <Icon icon="ic:round-question-mark" /> -->
 			</div>
 		</div>
 	</div>

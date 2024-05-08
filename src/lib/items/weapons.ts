@@ -25,7 +25,7 @@ export const BASIC_WEAPONS = {
 export const weapons = [
 	{
 		name: 'Stick',
-		damage: 1,
+		damage: 5,
 		durability: 1
 	}
 ];

@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { equip } from '$lib/core';
 	import { game } from '$lib/stores';
 
 	$: inventory = $game.hero.inventory;
@@ -11,7 +10,7 @@
 		{#each inventory as item}
 			<!-- svelte-ignore a11y-click-events-have-key-events -->
 			<!-- svelte-ignore a11y-no-static-element-interactions -->
-			<div class="inventory-slot" on:click={() => equip(item, hero)}>
+			<div class="inventory-slot">
 				{item?.name || ''}
 			</div>
 		{/each}
