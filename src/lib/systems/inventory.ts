@@ -1,6 +1,7 @@
 import { game } from '$lib/stores';
 import type { Character, Weapon } from '$lib/types';
 import { get } from 'svelte/store';
+import { updateCharacter } from './update';
 
 /**
  * @description Equips a weapon to the HERO
@@ -41,10 +42,7 @@ export function equipBasicWeapon(): void {
 
 	console.log(`${hero.name} equipped ${basicWeapon?.name}!`);
 
-	// TODO: update character
-	const gameCopy = { ...get(game) };
-	gameCopy.hero = hero;
-	game.update((g) => ({ ...g, ...gameCopy }));
+	updateCharacter(hero);
 }
 
 /**
@@ -64,8 +62,5 @@ export function equipRandomWeapon(character: Character): void {
 
 	console.log(`${character.name} equipped ${randomWeapon?.name}!`);
 
-	// TODO: update character
-	const gameCopy = { ...get(game) };
-	gameCopy.room.tiles.find((t) => t.content?.id === character.id)!.content = character;
-	game.update((g) => ({ ...g, ...gameCopy }));
+	updateCharacter(character);
 }

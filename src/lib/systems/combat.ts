@@ -3,6 +3,7 @@ import type { Character, Weapon } from '$lib/types';
 import { calculateAttackPoints, calculateDefensePoints } from '$lib/utils';
 import { get } from 'svelte/store';
 import { equipBasicWeapon, equipRandomWeapon } from './inventory';
+import { updateCharacter } from './update';
 
 export function attack(attacker: Character, defender: Character): void {
 	console.log(`${attacker.name} attacks ${defender.name} with a ${attacker.weapon?.name}!`);
@@ -34,12 +35,7 @@ export function takeDamage(defender: Character, damage: number): void {
 	// check if defender is dead
 	if (newDefenderStats.hp <= 0) return die(defender);
 
-	// TODO: replace with a `updateCharacter` function
-	// replace the game object's stats
-	const gameCopy = { ...get(game) };
-	gameCopy.room.tiles.find((t) => t.content?.id === defender.id)!.content = newDefenderStats;
-	// Update the game store with the modified game object
-	game.update((g) => ({ ...g, ...gameCopy }));
+	updateCharacter(newDefenderStats);
 }
 
 function breakWeapon(character: Character, weapon: Weapon): void {
@@ -51,7 +47,8 @@ function breakWeapon(character: Character, weapon: Weapon): void {
 }
 
 function die(character: Character): void {
-	console.log(`${character.name} died!`);
+	console.log(`${character.name} (${character.id}) died!`);
+	// TODO: check for HERO death
 	const gameCopy = { ...get(game) };
 	gameCopy.room.tiles.find((t) => t.content?.id === character.id)!.content = null;
 	game.update((g) => ({ ...g, ...gameCopy }));
