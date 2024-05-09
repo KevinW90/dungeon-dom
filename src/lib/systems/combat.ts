@@ -5,12 +5,14 @@ import { get } from 'svelte/store';
 import { equipBasicWeapon, equipRandomWeapon } from './inventory';
 import { updateCharacter, updateTurn } from './update';
 import { logEvent, updateEvent } from './eventLog';
+import { nextRoom } from './room';
+import { findAllEnemies } from '$lib/characters/enemies';
 
 export function attack(attacker: Character, defender: Character): void {
 	logEvent({
 		type: 'attack',
 		messages: [
-			`${attacker.name} ${attacker.id} attacks ${defender.name} ${defender.id} with a ${attacker.weapon?.name}!`
+			`${attacker.name} (${attacker.id}) attacks ${defender.name} (${defender.id}) with a ${attacker.weapon?.name}!`
 		]
 	});
 
@@ -64,5 +66,8 @@ function die(character: Character): void {
 
 	const gameCopy = { ...get(game) };
 	gameCopy.room.tiles.find((t) => t.content?.id === character.id)!.content = null;
+	// after the enemy is removed from the game
+	//   if it is the last enemy, go to the next room
+	if (character.type === 'enemy' && !findAllEnemies().length) return nextRoom();
 	game.update((g) => ({ ...g, ...gameCopy }));
 }

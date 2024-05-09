@@ -19,7 +19,7 @@ export function createGame() {
 		}
 	});
 
-	const room = createRoom(1);
+	const room = createRoom(2);
 
 	return {
 		hero,

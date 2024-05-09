@@ -8,7 +8,7 @@
 	import { nextRoom } from '$lib/systems/room';
 
 	$: hero = $game.hero;
-	$: enemiesCount = $game.room.tiles.filter((tile) => tile.content?.type === 'enemy').length;
+	$: enemiesCount = $game.room.tiles.filter((t) => t.content?.type === 'enemy').length;
 
 	// game map is a 5x5 tile grid
 	// gutter on sides is 3/4 tile width
@@ -156,7 +156,7 @@
 				{:else}
 					<button class="mock-btn" on:click={updateTurn}>
 						Continue {#if $game.turn === hero}
-							<span>(skip turn)</span>{/if}
+							<span>(end turn)</span>{/if}
 						->
 					</button>
 				{/if}
