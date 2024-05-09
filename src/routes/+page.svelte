@@ -8,6 +8,7 @@
 	import Icon from '@iconify/svelte';
 	import { onMount } from 'svelte';
 	import { attack } from '$lib/systems/combat';
+	import { updateTurn } from '$lib/systems/update';
 
 	let hero: Character, enemies: Character[];
 	$: {
@@ -26,6 +27,14 @@
 		calculateSizes();
 		// Update screen size on resize
 		window.addEventListener('resize', handleResize);
+
+		// Listen for the `spacebar` to continue the game
+		window.addEventListener('keydown', (e) => {
+			e.preventDefault();
+			if (e.key === ' ' && $game.enemyActionComplete) {
+				updateTurn();
+			}
+		});
 
 		return () => {
 			window.removeEventListener('resize', handleResize);

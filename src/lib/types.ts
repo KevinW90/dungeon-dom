@@ -3,6 +3,7 @@ export type Game = {
 	room: Room;
 	turn: Character;
 	log: GameEvent[];
+	enemyActionComplete: boolean; // tracks whether the enemy has completed its action
 };
 
 export type GameEvent = {

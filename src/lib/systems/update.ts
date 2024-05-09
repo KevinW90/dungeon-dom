@@ -30,5 +30,12 @@ export function updateTurn(): void {
 	game.update((g) => ({ ...g, ...gameCopy }));
 
 	// TODO: handle enemy turn
-	if (gameCopy.turn.type === 'enemy') setTimeout(() => attack(gameCopy.turn, gameCopy.hero), 1000);
+	if (gameCopy.turn.type === 'enemy') {
+		gameCopy.enemyActionComplete = false;
+		game.update((g) => ({ ...g, ...gameCopy }));
+		setTimeout(() => {
+			attack(gameCopy.turn, gameCopy.hero);
+			// attack function checks for enemy turn and marks action-complete as true
+		}, 1000);
+	}
 }

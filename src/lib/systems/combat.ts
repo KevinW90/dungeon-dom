@@ -21,7 +21,12 @@ export function attack(attacker: Character, defender: Character): void {
 	if (attacker.weapon?.durability && attacker.weapon?.durability <= 0)
 		breakWeapon(attacker, attacker.weapon!);
 
-	updateTurn();
+	// if it is the enemy turn, set the action-complete flag to true
+	if (attacker.type === 'enemy') {
+		const gameCopy = { ...get(game) };
+		gameCopy.enemyActionComplete = true;
+		game.update((g) => ({ ...g, ...gameCopy }));
+	}
 }
 
 export function takeDamage(defender: Character, damage: number): void {

@@ -82,6 +82,8 @@ export function createGame() {
 				type: 'info',
 				messages: ['Welcome to DungeonDom: Tile Explorer!', 'Click to interact with the tiles.']
 			}
-		]
+		],
+		// TODO: turn === hero ? true : false
+		enemyActionComplete: true
 	};
 }
