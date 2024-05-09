@@ -3,6 +3,7 @@ import type { Character, Item, Room, Tile } from './types';
 import * as utils from '$lib/utils';
 import { BASIC_WEAPONS, weapons } from './items/weapons';
 import { goblin } from './characters/enemies';
+import { createRoom } from './systems/room';
 
 function _createCharacter(options: any = {}): Character {
 	return {
@@ -34,26 +35,6 @@ export function createGameObject(what: string, options: any) {
 	return go;
 }
 
-function createRoom(): Room {
-	const tiles: Tile[] = Array.from({ length: 25 }, () => ({ content: null }));
-
-	// random enemy tiles
-	let enemyCount = 3;
-	while (enemyCount > 0) {
-		const index = Math.floor(Math.random() * 25);
-
-		if (tiles[index].content) continue;
-
-		tiles[index].content = createGameObject('character', goblin);
-		enemyCount--;
-	}
-
-	return {
-		id: utils.uuid(),
-		tiles
-	};
-}
-
 export function createGame() {
 	const hero = createGameObject('character', {
 		name: 'Hero',
@@ -71,7 +52,7 @@ export function createGame() {
 		}
 	});
 
-	const room = createRoom();
+	const room = createRoom(1);
 
 	return {
 		hero,

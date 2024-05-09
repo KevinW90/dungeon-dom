@@ -247,6 +247,7 @@
 			// override button styling
 			border: none;
 			color: white;
+			outline: none; // stops the button from being highlighted on 'spacebar'
 
 			&:nth-child(even) {
 				background-color: $color-dark-lite;
