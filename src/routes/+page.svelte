@@ -31,7 +31,8 @@
 		// Listen for the `spacebar` to continue the game
 		window.addEventListener('keydown', (e) => {
 			e.preventDefault();
-			if (e.key === ' ' && $game.enemyActionComplete) {
+			if (e.key === ' ') {
+				// update turn checks for enemy-action-complete
 				updateTurn();
 			}
 		});
@@ -158,6 +159,13 @@
 			{#each $game.log[$game.log.length - 1].messages as m}
 				<div>{m}</div>
 			{/each}
+			{#if $game.enemyActionComplete}
+				<button class="mock-btn" on:click={updateTurn}>
+					Continue {#if $game.turn.id === $game.hero.id}
+						<span>(skip turn)</span>{/if}
+					->
+				</button>
+			{/if}
 		</div>
 	</div>
 </div>
@@ -308,6 +316,20 @@
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
+	}
+
+	.mock-btn {
+		width: fit-content;
+		background-color: $color-gold;
+		padding: 0.5rem 1rem;
+		border-radius: 0.5rem;
+		cursor: pointer;
+		align-self: end;
+
+		// button overrides
+		border: none;
+		color: white;
+		font-family: 'Comic Sans', cursive;
 	}
 
 	:global(.option:first-child .iconify, .option:last-child .iconify) {

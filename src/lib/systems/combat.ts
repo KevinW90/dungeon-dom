@@ -9,7 +9,9 @@ import { logEvent, updateEvent } from './eventLog';
 export function attack(attacker: Character, defender: Character): void {
 	logEvent({
 		type: 'attack',
-		messages: [`${attacker.name} attacks ${defender.name} with a ${attacker.weapon?.name}!`]
+		messages: [
+			`${attacker.name} ${attacker.id} attacks ${defender.name} ${defender.id} with a ${attacker.weapon?.name}!`
+		]
 	});
 
 	// damage is at least 1
