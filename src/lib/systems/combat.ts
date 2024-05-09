@@ -31,6 +31,9 @@ export function attack(attacker: Character, defender: Character): void {
 		gameCopy.enemyActionComplete = true;
 		game.update((g) => ({ ...g, ...gameCopy }));
 	}
+
+	// attacking ends your turn
+	updateTurn();
 }
 
 export function takeDamage(defender: Character, damage: number): void {
