@@ -1,18 +1,12 @@
 <script lang="ts">
-	import { addToInventory, attack, unequip } from '$lib/core';
 	import { calculateAttackPoints, calculateDefensePoints } from '$lib/utils';
-	import { createGameObject } from '$lib/factory';
 	import { game } from '$lib/stores';
-	import type { Character } from '$lib/types';
-	import { weapons } from '$lib/items/weapons';
-	import { armors } from '$lib/items/armors';
 	import Icon from '@iconify/svelte';
 	import { onMount } from 'svelte';
+	import { attack } from '$lib/systems/combat';
+	import { updateTurn } from '$lib/systems/update';
 
-	let hero: Character, enemies: Character[];
-	$: {
-		hero = $game.hero;
-	}
+	$: hero = $game.hero;
 
 	// game map is a 5x5 tile grid
 	// gutter on sides is 3/4 tile width
@@ -27,6 +21,15 @@
 		// Update screen size on resize
 		window.addEventListener('resize', handleResize);
 
+		// Listen for the `spacebar` to continue the game
+		window.addEventListener('keydown', (e) => {
+			e.preventDefault();
+			if (e.key === ' ') {
+				// update turn checks for enemy-action-complete
+				updateTurn();
+			}
+		});
+
 		return () => {
 			window.removeEventListener('resize', handleResize);
 		};
@@ -38,17 +41,12 @@
 			width: window.innerWidth,
 			height: window.innerHeight
 		};
-		console.log(screenSize);
 	}
 
 	// Function to calculate tile width and gutter size
 	function calculateSizes() {
 		tileWidth = (screenSize.width - 4) / 6.5; // 7 columns (5 tiles + 2(.75) gutters)
 		gutterSize = tileWidth * 0.75;
-		console.log('tileWidth', tileWidth);
-		console.log('gutter', gutterSize);
-
-		console.log('total', tileWidth * 5 + 2 * gutterSize);
 	}
 
 	function handleResize() {
@@ -57,7 +55,10 @@
 	}
 
 	function handleInteraction(tile: any) {
-		console.log(tile);
+		if ($game.turn.id !== $game.hero.id) {
+			console.log('not your turn');
+			return;
+		}
 		if (tile?.content?.type === 'enemy') {
 			attack(hero, tile.content);
 		}
@@ -89,6 +90,8 @@
 				</div>
 			</div>
 		</div>
+
+		<div>Current Turn: {$game.turn.name} {$game.turn.id}</div>
 
 		<div id="game-map" style="--t-width: {tileWidth}px;">
 			{#each $game.room.tiles as tile}
@@ -122,19 +125,33 @@
 			</div>
 			<div class="option">
 				<Icon icon="solar:heart-bold" />
-				<span>10</span>
+				<span>{$game.hero.hp}</span>
 			</div>
 			<div class="option">
 				<Icon icon="mingcute:sword-fill" />
-				<span>1</span>
+				<span>{1}</span>
 			</div>
 			<div class="option">
 				<Icon icon="ic:round-shield" />
 				<span>0</span>
 			</div>
 			<div class="option">
-				<Icon icon="ic:round-question-mark" />
+				<span>{$game.hero.weapon?.name} {$game.hero.weapon?.durability}</span>
+				<!-- <Icon icon="ic:round-question-mark" /> -->
 			</div>
+		</div>
+
+		<div id="event-log">
+			{#each $game.log[$game.log.length - 1].messages as m}
+				<div>{m}</div>
+			{/each}
+			{#if $game.enemyActionComplete}
+				<button class="mock-btn" on:click={updateTurn}>
+					Continue {#if $game.turn.id === $game.hero.id}
+						<span>(skip turn)</span>{/if}
+					->
+				</button>
+			{/if}
 		</div>
 	</div>
 </div>
@@ -216,6 +233,7 @@
 			// override button styling
 			border: none;
 			color: white;
+			outline: none; // stops the button from being highlighted on 'spacebar'
 
 			&:nth-child(even) {
 				background-color: $color-dark-lite;
@@ -279,6 +297,26 @@
 	.option {
 		display: flex;
 		color: #fff;
+	}
+
+	#event-log {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.mock-btn {
+		width: fit-content;
+		background-color: $color-gold;
+		padding: 0.5rem 1rem;
+		border-radius: 0.5rem;
+		cursor: pointer;
+		align-self: end;
+
+		// button overrides
+		border: none;
+		color: white;
+		font-family: 'Comic Sans', cursive;
 	}
 
 	:global(.option:first-child .iconify, .option:last-child .iconify) {

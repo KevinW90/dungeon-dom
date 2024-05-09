@@ -1,6 +1,14 @@
 export type Game = {
 	hero: Character;
 	room: Room;
+	turn: Character;
+	log: GameEvent[];
+	enemyActionComplete: boolean; // tracks whether the enemy has completed its action
+};
+
+export type GameEvent = {
+	type: string;
+	messages: string[];
 };
 
 export type Room = {
