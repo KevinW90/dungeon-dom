@@ -5,8 +5,10 @@
 	import { onMount } from 'svelte';
 	import { attack } from '$lib/systems/combat';
 	import { updateTurn } from '$lib/systems/update';
+	import { nextRoom } from '$lib/systems/room';
 
 	$: hero = $game.hero;
+	$: enemiesCount = $game.room.tiles.filter((tile) => tile.content?.type === 'enemy').length;
 
 	// game map is a 5x5 tile grid
 	// gutter on sides is 3/4 tile width
@@ -55,7 +57,7 @@
 	}
 
 	function handleInteraction(tile: any) {
-		if ($game.turn === hero) {
+		if ($game.turn !== hero) {
 			console.log('not your turn');
 			return;
 		}
@@ -146,11 +148,18 @@
 				<div>{m}</div>
 			{/each}
 			{#if $game.enemyActionComplete}
-				<button class="mock-btn" on:click={updateTurn}>
-					Continue {#if $game.turn === hero}
-						<span>(skip turn)</span>{/if}
-					->
-				</button>
+				<!-- if no more enemies, button moves hero to the next room -->
+				{#if enemiesCount === 0}
+					<button class="mock-btn" on:click={nextRoom}>
+						<span>Next Room</span> ->
+					</button>
+				{:else}
+					<button class="mock-btn" on:click={updateTurn}>
+						Continue {#if $game.turn === hero}
+							<span>(skip turn)</span>{/if}
+						->
+					</button>
+				{/if}
 			{/if}
 		</div>
 	</div>
