@@ -2,6 +2,12 @@ export type Game = {
 	hero: Character;
 	room: Room;
 	turn: Character;
+	log: GameEvent[];
+};
+
+export type GameEvent = {
+	type: string;
+	messages: string[];
 };
 
 export type Room = {

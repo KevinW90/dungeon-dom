@@ -76,6 +76,12 @@ export function createGame() {
 	return {
 		hero,
 		room,
-		turn: hero
+		turn: hero,
+		log: [
+			{
+				type: 'info',
+				messages: ['Welcome to DungeonDom: Tile Explorer!', 'Click to interact with the tiles.']
+			}
+		]
 	};
 }

@@ -21,7 +21,6 @@ export function updateTurn(): void {
 		gameCopy.hero,
 		...gameCopy.room.tiles.filter((t) => t.content?.type === 'enemy').map((t) => t.content)
 	];
-	console.log('turn list', turnList);
 	const index = turnList.findIndex((t) => t.id === currentTurn.id);
 
 	// find the next character

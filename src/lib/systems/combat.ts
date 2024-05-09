@@ -4,9 +4,13 @@ import { calculateAttackPoints, calculateDefensePoints } from '$lib/utils';
 import { get } from 'svelte/store';
 import { equipBasicWeapon, equipRandomWeapon } from './inventory';
 import { updateCharacter, updateTurn } from './update';
+import { logEvent, updateEvent } from './eventLog';
 
 export function attack(attacker: Character, defender: Character): void {
-	console.log(`${attacker.name} attacks ${defender.name} with a ${attacker.weapon?.name}!`);
+	logEvent({
+		type: 'attack',
+		messages: [`${attacker.name} attacks ${defender.name} with a ${attacker.weapon?.name}!`]
+	});
 
 	// damage is at least 1
 	const damage = Math.max(1, calculateAttackPoints(attacker) - calculateDefensePoints(defender));
@@ -17,27 +21,27 @@ export function attack(attacker: Character, defender: Character): void {
 	if (attacker.weapon?.durability && attacker.weapon?.durability <= 0)
 		breakWeapon(attacker, attacker.weapon!);
 
-	// TODO: update the turn
 	updateTurn();
 }
 
 export function takeDamage(defender: Character, damage: number): void {
-	console.log(`${defender.name} takes ${damage} damage`);
+	updateEvent(`${defender.name} (${defender.id}) takes ${damage} damage`);
 	// calculate the new stats
 	const newDefenderStats = {
 		...defender,
 		hp: defender.hp - damage
 	};
-	console.log(newDefenderStats);
-
-	// check if defender is dead
-	if (newDefenderStats.hp <= 0) return die(defender);
 
 	updateCharacter(newDefenderStats);
+	// check if defender is dead
+	if (newDefenderStats.hp <= 0) die(defender);
 }
 
 function breakWeapon(character: Character, weapon: Weapon): void {
-	console.log(`${character.name}'s ${weapon.name} breaks!`);
+	logEvent({
+		type: 'info',
+		messages: [`${character.name}'s ${weapon.name} breaks!`]
+	});
 
 	// equip the basic weapon (hero) or random weapon (enemy)
 	if (character.type === 'hero') return equipBasicWeapon();
@@ -45,8 +49,12 @@ function breakWeapon(character: Character, weapon: Weapon): void {
 }
 
 function die(character: Character): void {
-	console.log(`${character.name} (${character.id}) died!`);
-	// TODO: check for HERO death
+	logEvent({
+		type: 'death',
+		messages: [`${character.name} (${character.id}) died!`]
+	});
+	if (character.type === 'hero') return updateEvent('Game Over!');
+
 	const gameCopy = { ...get(game) };
 	gameCopy.room.tiles.find((t) => t.content?.id === character.id)!.content = null;
 	game.update((g) => ({ ...g, ...gameCopy }));

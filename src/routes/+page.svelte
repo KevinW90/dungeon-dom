@@ -144,6 +144,12 @@
 				<!-- <Icon icon="ic:round-question-mark" /> -->
 			</div>
 		</div>
+
+		<div id="event-log">
+			{#each $game.log[$game.log.length - 1].messages as m}
+				<div>{m}</div>
+			{/each}
+		</div>
 	</div>
 </div>
 
@@ -287,6 +293,12 @@
 	.option {
 		display: flex;
 		color: #fff;
+	}
+
+	#event-log {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
 	}
 
 	:global(.option:first-child .iconify, .option:last-child .iconify) {
