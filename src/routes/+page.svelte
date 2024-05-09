@@ -1,19 +1,12 @@
 <script lang="ts">
 	import { calculateAttackPoints, calculateDefensePoints } from '$lib/utils';
-	import { createGameObject } from '$lib/factory';
 	import { game } from '$lib/stores';
-	import type { Character } from '$lib/types';
-	import { weapons } from '$lib/items/weapons';
-	import { armors } from '$lib/items/armors';
 	import Icon from '@iconify/svelte';
 	import { onMount } from 'svelte';
 	import { attack } from '$lib/systems/combat';
 	import { updateTurn } from '$lib/systems/update';
 
-	let hero: Character, enemies: Character[];
-	$: {
-		hero = $game.hero;
-	}
+	$: hero = $game.hero;
 
 	// game map is a 5x5 tile grid
 	// gutter on sides is 3/4 tile width
@@ -48,17 +41,12 @@
 			width: window.innerWidth,
 			height: window.innerHeight
 		};
-		console.log(screenSize);
 	}
 
 	// Function to calculate tile width and gutter size
 	function calculateSizes() {
 		tileWidth = (screenSize.width - 4) / 6.5; // 7 columns (5 tiles + 2(.75) gutters)
 		gutterSize = tileWidth * 0.75;
-		console.log('tileWidth', tileWidth);
-		console.log('gutter', gutterSize);
-
-		console.log('total', tileWidth * 5 + 2 * gutterSize);
 	}
 
 	function handleResize() {
@@ -67,8 +55,6 @@
 	}
 
 	function handleInteraction(tile: any) {
-		console.log(tile);
-		// TODO: check for hero turn
 		if ($game.turn.id !== $game.hero.id) {
 			console.log('not your turn');
 			return;

@@ -1,5 +1,5 @@
 import { goblin } from '$lib/characters/enemies';
-import { createGameObject } from '$lib/factory';
+import { createCharacter } from '$lib/factory';
 import type { Room, Tile } from '$lib/types';
 import * as utils from '$lib/utils';
 
@@ -12,7 +12,7 @@ export function createRoom(enemyCount: number): Room {
 
 		if (tiles[index].content) continue;
 
-		tiles[index].content = createGameObject('character', goblin);
+		tiles[index].content = createCharacter(goblin);
 		enemyCount--;
 	}
 
