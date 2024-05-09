@@ -55,7 +55,7 @@
 	}
 
 	function handleInteraction(tile: any) {
-		if ($game.turn.id !== $game.hero.id) {
+		if ($game.turn === hero) {
 			console.log('not your turn');
 			return;
 		}
@@ -125,18 +125,18 @@
 			</div>
 			<div class="option">
 				<Icon icon="solar:heart-bold" />
-				<span>{$game.hero.hp}</span>
+				<span>{hero.hp}</span>
 			</div>
 			<div class="option">
 				<Icon icon="mingcute:sword-fill" />
-				<span>{1}</span>
+				<span>{calculateAttackPoints(hero)}</span>
 			</div>
 			<div class="option">
 				<Icon icon="ic:round-shield" />
-				<span>0</span>
+				<span>{calculateDefensePoints(hero)}</span>
 			</div>
 			<div class="option">
-				<span>{$game.hero.weapon?.name} {$game.hero.weapon?.durability}</span>
+				<span>{hero.weapon?.name} {hero.weapon?.durability}</span>
 				<!-- <Icon icon="ic:round-question-mark" /> -->
 			</div>
 		</div>
@@ -147,7 +147,7 @@
 			{/each}
 			{#if $game.enemyActionComplete}
 				<button class="mock-btn" on:click={updateTurn}>
-					Continue {#if $game.turn.id === $game.hero.id}
+					Continue {#if $game.turn === hero}
 						<span>(skip turn)</span>{/if}
 					->
 				</button>
