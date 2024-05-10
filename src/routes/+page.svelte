@@ -57,6 +57,8 @@
 	}
 
 	function handleInteraction(tile: any) {
+		// if game is over, no action
+		if (!$game.turn) return;
 		if ($game.turn !== hero) {
 			console.log('not your turn');
 			return;
@@ -93,7 +95,7 @@
 			</div>
 		</div>
 
-		<div>Current Turn: {$game.turn.name} {$game.turn.id}</div>
+		<div>Current Turn: {$game.turn?.name} {$game.turn?.id}</div>
 
 		<div id="game-map" style="--t-width: {tileWidth}px;">
 			{#each $game.room.tiles as tile}
@@ -155,8 +157,13 @@
 					</button>
 				{:else}
 					<button class="mock-btn" on:click={updateTurn}>
-						Continue {#if $game.turn === hero}
-							<span>(end turn)</span>{/if}
+						{#if !$game.running}
+							Restart
+						{:else if $game.turn === hero}
+							End Turn
+						{:else}
+							Continue
+						{/if}
 						->
 					</button>
 				{/if}

@@ -25,15 +25,16 @@ export function attack(attacker: Character, defender: Character): void {
 	if (attacker.weapon?.durability && attacker.weapon?.durability <= 0)
 		breakWeapon(attacker, attacker.weapon!);
 
+	const gameCopy = get(game);
 	// if it is the enemy turn, set the action-complete flag to true
 	if (attacker.type === 'enemy') {
-		const gameCopy = { ...get(game) };
 		gameCopy.enemyActionComplete = true;
 		game.update((g) => ({ ...g, ...gameCopy }));
 	}
 
-	// attacking ends your turn
-	updateTurn();
+	// hero attacking ends your turn
+	const updatedDefender = gameCopy.room.tiles.find((t) => t.content?.id === defender.id)!.content;
+	if (gameCopy.running && attacker === gameCopy.hero && updatedDefender?.hp > 0) updateTurn();
 }
 
 export function takeDamage(defender: Character, damage: number): void {
@@ -65,12 +66,18 @@ function die(character: Character): void {
 		type: 'death',
 		messages: [`${character.name} (${character.id}) died!`]
 	});
-	if (character.type === 'hero') return updateEvent('Game Over!');
-
 	const gameCopy = { ...get(game) };
+
+	if (character.type === 'hero') {
+		updateEvent('Game Over!');
+		gameCopy.running = false;
+		game.update((g) => ({ ...g, ...gameCopy }));
+		return;
+	}
+
 	gameCopy.room.tiles.find((t) => t.content?.id === character.id)!.content = null;
 	// after the enemy is removed from the game
 	//   if it is the last enemy, go to the next room
-	if (character.type === 'enemy' && !findAllEnemies().length) return nextRoom();
+	if (!findAllEnemies().length) return nextRoom();
 	game.update((g) => ({ ...g, ...gameCopy }));
 }

@@ -19,7 +19,7 @@ export function createGame() {
 		}
 	});
 
-	const room = createRoom(2);
+	const room = createRoom(4);
 
 	return {
 		hero,
@@ -32,6 +32,7 @@ export function createGame() {
 			}
 		],
 		// TODO: turn === hero ? true : false
-		enemyActionComplete: true
+		enemyActionComplete: true,
+		running: true
 	};
 }
