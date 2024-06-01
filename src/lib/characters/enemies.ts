@@ -1,3 +1,7 @@
+import { game } from '$lib/stores';
+import type { Character } from '$lib/types';
+import { get, writable, type Writable } from 'svelte/store';
+
 export const goblin = {
 	name: 'Goblin',
 	type: 'enemy',
@@ -13,3 +17,9 @@ export const goblin = {
 		hands: null
 	}
 };
+
+export function findAllEnemies(): Character[] {
+	return get(game)
+		.room.tiles.filter((tile) => tile.content?.type === 'enemy')
+		.map((tile) => tile.content);
+}

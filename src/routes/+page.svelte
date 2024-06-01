@@ -5,8 +5,10 @@
 	import { onMount } from 'svelte';
 	import { attack } from '$lib/systems/combat';
 	import { updateTurn } from '$lib/systems/update';
+	import { nextRoom } from '$lib/systems/room';
 
 	$: hero = $game.hero;
+	$: enemiesCount = $game.room.tiles.filter((t) => t.content?.type === 'enemy').length;
 
 	// game map is a 5x5 tile grid
 	// gutter on sides is 3/4 tile width
@@ -55,7 +57,9 @@
 	}
 
 	function handleInteraction(tile: any) {
-		if ($game.turn.id !== $game.hero.id) {
+		// if game is over, no action
+		if (!$game.turn) return;
+		if ($game.turn !== hero) {
 			console.log('not your turn');
 			return;
 		}
@@ -91,7 +95,7 @@
 			</div>
 		</div>
 
-		<div>Current Turn: {$game.turn.name} {$game.turn.id}</div>
+		<div>Current Turn: {$game.turn?.name} {$game.turn?.id}</div>
 
 		<div id="game-map" style="--t-width: {tileWidth}px;">
 			{#each $game.room.tiles as tile}
@@ -125,18 +129,18 @@
 			</div>
 			<div class="option">
 				<Icon icon="solar:heart-bold" />
-				<span>{$game.hero.hp}</span>
+				<span>{hero.hp}</span>
 			</div>
 			<div class="option">
 				<Icon icon="mingcute:sword-fill" />
-				<span>{1}</span>
+				<span>{calculateAttackPoints(hero)}</span>
 			</div>
 			<div class="option">
 				<Icon icon="ic:round-shield" />
-				<span>0</span>
+				<span>{calculateDefensePoints(hero)}</span>
 			</div>
 			<div class="option">
-				<span>{$game.hero.weapon?.name} {$game.hero.weapon?.durability}</span>
+				<span>{hero.weapon?.name} {hero.weapon?.durability}</span>
 				<!-- <Icon icon="ic:round-question-mark" /> -->
 			</div>
 		</div>
@@ -146,11 +150,23 @@
 				<div>{m}</div>
 			{/each}
 			{#if $game.enemyActionComplete}
-				<button class="mock-btn" on:click={updateTurn}>
-					Continue {#if $game.turn.id === $game.hero.id}
-						<span>(skip turn)</span>{/if}
-					->
-				</button>
+				<!-- if no more enemies, button moves hero to the next room -->
+				{#if enemiesCount === 0}
+					<button class="mock-btn" on:click={nextRoom}>
+						<span>Next Room</span> ->
+					</button>
+				{:else}
+					<button class="mock-btn" on:click={updateTurn}>
+						{#if !$game.running}
+							Restart
+						{:else if $game.turn === hero}
+							End Turn
+						{:else}
+							Continue
+						{/if}
+						->
+					</button>
+				{/if}
 			{/if}
 		</div>
 	</div>

@@ -2,21 +2,21 @@ export const BASIC_WEAPONS = {
 	// warrior
 	sword: {
 		name: 'Basic Sword',
-		damage: 1,
+		damage: 2,
 		durability: null,
 		type: 'basic'
 	},
 	// archer
 	bow: {
-		name: 'Basic Bow',
-		damage: 1,
+		name: 'Basic Arrow',
+		damage: 2,
 		durability: null,
 		type: 'basic'
 	},
 	// mage
 	staff: {
-		name: 'Basic Staff',
-		damage: 1,
+		name: 'Basic Spell',
+		damage: 2,
 		durability: null,
 		type: 'basic'
 	}
@@ -25,7 +25,7 @@ export const BASIC_WEAPONS = {
 export const weapons = [
 	{
 		name: 'Stick',
-		damage: 5,
+		damage: 1,
 		durability: 1
 	}
 ];

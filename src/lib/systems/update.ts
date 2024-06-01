@@ -3,6 +3,7 @@ import type { Character } from '$lib/types';
 import { get } from 'svelte/store';
 import { attack } from './combat';
 import { logEvent } from './eventLog';
+import { createGame } from './initialization';
 
 export function updateCharacter(characterData: Character): void {
 	const gameCopy = { ...get(game) };
@@ -17,6 +18,9 @@ export function updateCharacter(characterData: Character): void {
 
 export function updateTurn(): void {
 	const gameCopy = { ...get(game) };
+
+	if (!gameCopy.running) return game.set(createGame());
+
 	if (gameCopy.enemyActionComplete) {
 		const currentTurn = gameCopy.turn;
 		const turnList = [
@@ -24,7 +28,7 @@ export function updateTurn(): void {
 			...gameCopy.room.tiles.filter((t) => t.content?.type === 'enemy').map((t) => t.content)
 		];
 
-		const index = turnList.findIndex((t) => t.id === currentTurn.id);
+		const index = turnList.findIndex((t) => t.id === currentTurn?.id);
 
 		// find the next character
 		let nextIndex = (index + 1) % turnList.length;
@@ -33,11 +37,11 @@ export function updateTurn(): void {
 		game.update((g) => ({ ...g, ...gameCopy }));
 	}
 
-	if (gameCopy.turn.type === 'enemy') {
+	if (gameCopy.turn?.type === 'enemy') {
 		gameCopy.enemyActionComplete = false;
 		game.update((g) => ({ ...g, ...gameCopy }));
 		setTimeout(() => {
-			attack(gameCopy.turn, gameCopy.hero);
+			attack(gameCopy.turn!, gameCopy.hero);
 			// attack function checks for enemy turn and marks action-complete as true
 		}, 1000);
 	}

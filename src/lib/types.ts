@@ -1,9 +1,10 @@
 export type Game = {
 	hero: Character;
 	room: Room;
-	turn: Character;
+	turn: Character | null;
 	log: GameEvent[];
 	enemyActionComplete: boolean; // tracks whether the enemy has completed its action
+	running: boolean;
 };
 
 export type GameEvent = {
