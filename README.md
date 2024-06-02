@@ -1,38 +1,19 @@
-# create-svelte
+# DungeonDom - An exploration of game design and development using web technologies
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+## Introduction
 
-## Creating a project
+DungeonDom is a project that I started to explore game design and development using web technologies. The project is a work in progress and is being developed in my free time. The game is being developed SvelteKit. There are different versions in mind, each with the goal of learning an aspect or two of game development.
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Versions
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+### Version 1 - Tile Explorer
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+The first version of the game is a simple tile explorer. The player clicks on tiles to interact with them. Player stats on displayed on screen, and enemies can be fought. When the last enemy is defeated, the player moves to a new room. The game is over when the player dies. There is no loot, chests, weapons that can be used, and only one type of enemy. The goal of this version is to learn some basic mechanics of game development, such as game initialization, interactions, turn-based combat, room transitions, and game over conditions.
 
-## Developing
+### Version 2 - Roguelike Dungeon Crawler
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+The second version of the game is a roguelike dungeon crawler, with heavy influence from early Pokemon games (think Fire Red and Leaf Green). It has a similar tile-based movement system, world interaction system, and turn-based combat system. The player will be able to equip weapons and exploration is room-by-room. The goal of this version is to learn more advanced game mechanics, such as procedural generation, item management, and interactions.
 
-```bash
-npm run dev
+### Version 3 - Card Game
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+The third version of the game is a card game. The player will have a deck of cards that they can use to interact with the world. The game will be turn-based, with the player and enemies taking turns to play cards. The goal of this version is to learn how to implement a card game in a digital format.
