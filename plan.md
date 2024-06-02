@@ -13,8 +13,9 @@
 
 ### Rooms
 
-- A room will be a 5x5 grid of tiles surrounded by walls (final size 7x7)
-- The player will start in the center of the room
+- Each level is one room.
+- The current room is tracked by a store value.
+- Room logic is handled by an object with methods that update the store value.
 
 ### UI
 
